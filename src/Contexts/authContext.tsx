@@ -1,34 +1,34 @@
-import React, {useState, createContext} from "react";
+import React, { useState, useEffect, createContext } from "react";
 import { ChildrenProps } from "./deleteContext";
+import { useNavigate } from "react-router-dom";
 
-export interface UserDataProps{
-    email: string,
+export interface UserDataProps {
+  userId: string | null;
 }
 
 export type AuthType = {
-    userData: UserDataProps,
-    setUserData: Function
-}
+  userData: UserDataProps;
+  setUserData: Function;
+};
 
-const AuthContext = createContext<AuthType|null>(null);
+const AuthContext = createContext<AuthType | null>(null);
 
-export const AuthProvider:React.FC<ChildrenProps> = ({ children }) => {
+export const AuthProvider: React.FC<ChildrenProps> = ({ children }) => {
+  const navigate = useNavigate();
+  const [userData, setUserData] = useState({ userId: null });
 
-	const [userData, setUserData] = useState(() => {
-        const email = localStorage.getItem('@Project:email');
+  useEffect(() => {
+    if (userData.userId) {
+      // Navigate to home page if user is logged in
+      navigate("/");
+    }
+  }, [userData.userId]);
 
-        if (email) {
-            return { email: JSON.parse(email) };
-        }else{
-            return {email:""} };
-	});
-
-    return(
-		<AuthContext.Provider value={{userData, setUserData}} > 
-		    {children} 
-		</AuthContext.Provider>
-	);
-
-}
+  return (
+    <AuthContext.Provider value={{ userData, setUserData }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
 export default AuthContext;

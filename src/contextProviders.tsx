@@ -5,18 +5,21 @@ import { ChildrenProps } from "./Contexts/deleteContext";
 import { CategoriesContextProvider } from "./Contexts/categoriesContext";
 import { AddContextProvider } from "./Contexts/addContext";
 import { AuthProvider } from "./Contexts/authContext";
+import { EditContextProvider } from "./Contexts/editContext";
 
 const ContextProviders: React.FC<ChildrenProps> = ({ children }) => {
   return (
-    <TaskListContextProvider>
-      <DeleteContextProvider>
-        <AddContextProvider>
-          <CategoriesContextProvider>
-            <AuthProvider>{children}</AuthProvider>
-          </CategoriesContextProvider>
-        </AddContextProvider>
-      </DeleteContextProvider>
-    </TaskListContextProvider>
+    <AuthProvider>
+      <TaskListContextProvider>
+        <DeleteContextProvider>
+          <AddContextProvider>
+            <EditContextProvider>
+              <CategoriesContextProvider>{children}</CategoriesContextProvider>
+            </EditContextProvider>
+          </AddContextProvider>
+        </DeleteContextProvider>
+      </TaskListContextProvider>
+    </AuthProvider>
   );
 };
 

@@ -1,19 +1,37 @@
 import React, { useState, useContext } from "react";
 import * as S from "./styles";
 import Logo from "../../Img/Logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate  } from "react-router-dom";
 import AuthContext, { AuthType } from "../../Contexts/authContext";
 import { SERVER_URL } from "../../Contexts/taskListContext";
 import { toast } from "react-toastify";
 
-const Login: React.FC = () => {
+const Signup: React.FC = () => {
+  const navigate = useNavigate ();
   const { setUserData } = useContext(AuthContext) as AuthType;
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  function handleLogin() {
-    // Call API for login
-    fetch(`${SERVER_URL}/login`, {
+  function handleRegistration() {
+    // validate username
+    if (username.trim().length < 3) {
+      toast.error("Username must have at least 3 characters");
+      return;
+    }
+    // validate password
+    if (password.trim().length < 6) {
+      toast.error("Password must have at least 6 characters");
+      return;
+    }
+
+    // validate password and confirmPassword
+    if (password !== confirmPassword) {
+      toast.error("Passwords don't match");
+      return;
+    }
+    // Call API for register
+    fetch(`${SERVER_URL}/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -46,16 +64,18 @@ const Login: React.FC = () => {
     setPassword(event.target.value);
   }
 
+  function handleConfirmPassword(event: React.ChangeEvent<HTMLInputElement>) {
+    setConfirmPassword(event.target.value);
+  }
+
   return (
     <S.Page>
       <S.LeftSide>
         <S.Img src={Logo}></S.Img>
       </S.LeftSide>
       <S.RightSide>
-        <S.Title>Welcome to Tasker</S.Title>
-        <S.Subtitle>
-          Please, insert your informations to access your tasks.
-        </S.Subtitle>
+        <S.Title>Registration to Tasker</S.Title>
+        <S.Subtitle>Please, register yourself to access your tasks.</S.Subtitle>
         <S.FieldName>Email</S.FieldName>
         <S.InputField
           value={username}
@@ -69,20 +89,21 @@ const Login: React.FC = () => {
           type="password"
           onChange={handlePassword}
         />
-        {/* <S.KeepSigned>
-          <S.Checkbox />
-          <S.Subtitle>Remember me</S.Subtitle>
-        </S.KeepSigned> */}
-        {/* <Link to="/">
-          <S.SignIn onClick={handleLogin}>Sign In</S.SignIn>
-        </Link> */}
-        <S.SignIn onClick={handleLogin}>Sign In</S.SignIn>
+        <S.FieldName>Confirm Password</S.FieldName>
+        <S.InputField
+          placeholder="Insert your password"
+          type="password"
+          onChange={handleConfirmPassword}
+        />
+
+        <S.SignIn onClick={handleRegistration}>Sign Up</S.SignIn>
+
         <S.Subtitle>
-          Don't have an account? <Link to="/signup">Sign Up</Link>
+          Already have an account? <Link to="/login">Sign In</Link>
         </S.Subtitle>
       </S.RightSide>
     </S.Page>
   );
 };
 
-export default Login;
+export default Signup;

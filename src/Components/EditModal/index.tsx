@@ -1,16 +1,18 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import * as S from "./styles";
-import { AddContext } from "../../Contexts/addContext";
-import { AddType } from "../../Contexts/addType";
 import { TaskListContext } from "../../Contexts/taskListContext";
 import { TaskListType, CreateTaskProps } from "../../Contexts/taskType";
 import { CategoriesContext } from "../../Contexts/categoriesContext";
 import { CategorieContextType } from "../../Contexts/categoriesType";
+import { EditContext } from "../../Contexts/editContext";
+import { EditType } from "../../Contexts/editType";
 
-const AddModal: React.FC = () => {
-  const { addTask } = useContext(TaskListContext) as TaskListType;
+const EditModal: React.FC = () => {
+  const { editTask } = useContext(TaskListContext) as TaskListType;
   const { categList } = useContext(CategoriesContext) as CategorieContextType;
-  const { setShowAdd } = useContext(AddContext) as AddType;
+  const { id, showEdit, setShowEdit, todo } = useContext(
+    EditContext
+  ) as EditType;
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -18,12 +20,27 @@ const AddModal: React.FC = () => {
     categList.findIndex((cat) => cat.name === "None")
   );
 
-  function handleCancel() {
-    setShowAdd(false);
-  }
+  useEffect(() => {
+    if (showEdit === false) return;
 
-  function handleAdd() {
-    const newTask: CreateTaskProps = {
+    setTitle(todo.title);
+    setDescription(todo.description);
+    console.log("todo.categorie", todo.categorie);
+    console.log(
+      "categList: ",
+      categList.find((cat) => cat.name === todo.categorie)?.id
+    );
+    setTaskCat(
+      Number(categList.find((cat) => cat.name === todo.categorie)?.id) || 0
+    );
+  }, [showEdit, todo]);
+
+  function handleCancel() {
+    setShowEdit(false);
+  }
+  console.log("taskCat: ", taskCat);
+  function handleEdit() {
+    const updatedTask: CreateTaskProps = {
       title: title,
       description: description,
       categorie: categList[taskCat].name,
@@ -31,13 +48,14 @@ const AddModal: React.FC = () => {
       completed: false,
     };
 
-    setShowAdd(false);
-    addTask(newTask);
+    setShowEdit(false);
+    editTask(id, updatedTask);
   }
 
-  var e = document.getElementById("select") as HTMLSelectElement;
-
   function handleChange() {
+    const e = document.getElementById("select") as HTMLSelectElement;
+    console.log('first', Number(e.options[e.selectedIndex].value));
+
     setTaskCat(Number(e.options[e.selectedIndex].value));
   }
 
@@ -61,7 +79,7 @@ const AddModal: React.FC = () => {
         <S.Text>Select a categorie</S.Text>
         <S.Select id="select" onChange={handleChange}>
           {categList.map((cat) => (
-            <option style={{ backgroundColor: cat.color }} value={cat.id}>
+            <option style={{ backgroundColor: cat.color }} value={taskCat}>
               {cat.name}
             </option>
           ))}
@@ -69,11 +87,11 @@ const AddModal: React.FC = () => {
 
         <S.Buttons>
           <S.CancelButton onClick={handleCancel}>Cancel</S.CancelButton>
-          <S.DeletButton onClick={handleAdd}>Add</S.DeletButton>
+          <S.DeletButton onClick={handleEdit}>Update</S.DeletButton>
         </S.Buttons>
       </S.Container>
     </S.Background>
   );
 };
 
-export default AddModal;
+export default EditModal;
