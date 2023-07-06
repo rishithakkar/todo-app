@@ -76,7 +76,7 @@ const Signup: React.FC = () => {
       <S.RightSide>
         <S.Title>Registration to Tasker</S.Title>
         <S.Subtitle>Please, register yourself to access your tasks.</S.Subtitle>
-        <S.FieldName>Email</S.FieldName>
+        <S.FieldName>Username</S.FieldName>
         <S.InputField
           value={username}
           id="email"
