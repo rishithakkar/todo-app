@@ -173,6 +173,7 @@ export const TaskListContextProvider: React.FC<ChildrenProps> = ({
           setNotDoneTasks(
             taskList.filter((task: TaskProps) => task.completed !== true)
           );
+          toast.success(`Task ${isCompleted ? "completed" : "not completed"}`);
         } else {
           toast.error("Task not updated");
         }
@@ -209,6 +210,7 @@ export const TaskListContextProvider: React.FC<ChildrenProps> = ({
         setNotDoneTasks(
           taskList.filter((task: TaskProps) => task.completed !== true)
         );
+        toast.success("Task deleted");
       })
       .catch((error) => {
         toast.error(error);
