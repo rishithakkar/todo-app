@@ -7,15 +7,7 @@ interface ChildrenProps {
   children: React.ReactNode;
 }
 
-// {
-//     id: 3,
-//     title: "Example task 3",
-//     done: true,
-//     categorie: "Home",
-//     color: "#FF9C9C",
-//   }
-
-export const SERVER_URL = "http://localhost:5000";
+export const SERVER_URL = "https://todo-list-flask-ga9f.onrender.com";
 
 export const TaskListContext = createContext<TaskListType | null>(null);
 
