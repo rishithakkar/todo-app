@@ -56,7 +56,7 @@ const Login: React.FC = () => {
         <S.Subtitle>
           Please, insert your informations to access your tasks.
         </S.Subtitle>
-        <S.FieldName>Email</S.FieldName>
+        <S.FieldName>Username</S.FieldName>
         <S.InputField
           value={username}
           id="email"
