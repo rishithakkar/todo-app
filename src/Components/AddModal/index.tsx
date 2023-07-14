@@ -61,7 +61,10 @@ const AddModal: React.FC = () => {
         <S.Text>Select a categorie</S.Text>
         <S.Select id="select" onChange={handleChange}>
           {categList.map((cat) => (
-            <option style={{ backgroundColor: cat.color }} value={cat.id}>
+            <option
+              key={cat.id}
+              style={{ backgroundColor: cat.color }}
+              value={cat.id}>
               {cat.name}
             </option>
           ))}

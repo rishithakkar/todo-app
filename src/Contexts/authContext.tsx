@@ -9,6 +9,8 @@ export interface UserDataProps {
 export type AuthType = {
   userData: UserDataProps;
   setUserData: Function;
+  loading: boolean;
+  handleLoading: (flag: boolean) => void;
 };
 
 const AuthContext = createContext<AuthType | null>(null);
@@ -16,6 +18,7 @@ const AuthContext = createContext<AuthType | null>(null);
 export const AuthProvider: React.FC<ChildrenProps> = ({ children }) => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState({ userId: null });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (userData.userId) {
@@ -24,8 +27,13 @@ export const AuthProvider: React.FC<ChildrenProps> = ({ children }) => {
     }
   }, [userData.userId]);
 
+  const handleLoading = (flag: boolean) => {
+    setLoading(flag);
+  };
+
   return (
-    <AuthContext.Provider value={{ userData, setUserData }}>
+    <AuthContext.Provider
+      value={{ userData, setUserData, loading, handleLoading }}>
       {children}
     </AuthContext.Provider>
   );

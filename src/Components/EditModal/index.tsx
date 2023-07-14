@@ -25,11 +25,7 @@ const EditModal: React.FC = () => {
 
     setTitle(todo.title);
     setDescription(todo.description);
-    console.log("todo.categorie", todo.categorie);
-    console.log(
-      "categList: ",
-      categList.find((cat) => cat.name === todo.categorie)?.id
-    );
+
     setTaskCat(
       Number(categList.find((cat) => cat.name === todo.categorie)?.id) || 0
     );
@@ -38,7 +34,7 @@ const EditModal: React.FC = () => {
   function handleCancel() {
     setShowEdit(false);
   }
-  console.log("taskCat: ", taskCat);
+
   function handleEdit() {
     const updatedTask: CreateTaskProps = {
       title: title,
@@ -54,8 +50,6 @@ const EditModal: React.FC = () => {
 
   function handleChange() {
     const e = document.getElementById("select") as HTMLSelectElement;
-    console.log('first', Number(e.options[e.selectedIndex].value));
-
     setTaskCat(Number(e.options[e.selectedIndex].value));
   }
 
@@ -79,7 +73,10 @@ const EditModal: React.FC = () => {
         <S.Text>Select a categorie</S.Text>
         <S.Select id="select" onChange={handleChange}>
           {categList.map((cat) => (
-            <option style={{ backgroundColor: cat.color }} value={taskCat}>
+            <option
+              key={cat.id}
+              style={{ backgroundColor: cat.color }}
+              value={taskCat}>
               {cat.name}
             </option>
           ))}

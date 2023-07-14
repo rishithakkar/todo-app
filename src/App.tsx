@@ -1,5 +1,3 @@
-import React from "react";
-
 import GlobalStyle from "./global";
 import ContextProviders from "./contextProviders";
 
@@ -11,12 +9,13 @@ import ProtectedRoute from "./Routes/Route";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Signup from "./Pages/Registration";
+import LoadingSpinnerComponent from "./Components/Core/LoadingSpinner";
 
 function App() {
   return (
     <>
-    <BrowserRouter>
-      <ContextProviders>
+      <BrowserRouter>
+        <ContextProviders>
           <Routes>
             <Route
               path="/"
@@ -50,9 +49,11 @@ function App() {
                 </ProtectedRoute>
               }></Route>
           </Routes>
-        <GlobalStyle />
-      </ContextProviders>
+          <GlobalStyle />
+          <LoadingSpinnerComponent />
+        </ContextProviders>
       </BrowserRouter>
+
       <ToastContainer
         position="bottom-right"
         autoClose={5000}

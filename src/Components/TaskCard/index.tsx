@@ -56,7 +56,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
   }
 
   return (
-    <S.Container>
+    <S.Container key={id}>
       <S.CheckField>
         <S.CheckboxRing onClick={handleCheck}>
           <S.CheckFill done={completed} />

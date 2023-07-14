@@ -14,7 +14,7 @@ export const TaskListContext = createContext<TaskListType | null>(null);
 export const TaskListContextProvider: React.FC<ChildrenProps> = ({
   children,
 }) => {
-  const { userData } = useContext(AuthContext) as AuthType;
+  const { userData, handleLoading } = useContext(AuthContext) as AuthType;
   const [taskList, setTaskList] = useState<TaskProps[]>([]);
   const [doneTasks, setDoneTasks] = useState<TaskProps[]>([]);
   const [notDoneTasks, setNotDoneTasks] = useState<TaskProps[]>([]);
@@ -22,6 +22,7 @@ export const TaskListContextProvider: React.FC<ChildrenProps> = ({
   useEffect(() => {
     // Fetch todos from server and set state
     if (!userData.userId) return;
+    handleLoading(true);
     fetch(`${SERVER_URL}/todos`, {
       method: "GET",
       headers: {
@@ -53,13 +54,16 @@ export const TaskListContextProvider: React.FC<ChildrenProps> = ({
           setNotDoneTasks([]);
           toast.info("No tasks found");
         }
+        handleLoading(false);
       })
       .catch((error) => {
         toast.error(error.message);
+        handleLoading(false);
       });
   }, [userData.userId]);
 
   const addTask = (task: CreateTaskProps) => {
+    handleLoading(true);
     fetch(`${SERVER_URL}/todo`, {
       method: "POST",
       headers: {
@@ -86,13 +90,16 @@ export const TaskListContextProvider: React.FC<ChildrenProps> = ({
         } else {
           toast.error("Task not added");
         }
+        handleLoading(false);
       })
       .catch((error) => {
         toast.error(error);
+        handleLoading(false);
       });
   };
 
   const editTask = (id: string, task: CreateTaskProps) => {
+    handleLoading(true);
     fetch(`${SERVER_URL}/todo/${id}`, {
       method: "PUT",
       headers: {
@@ -133,13 +140,16 @@ export const TaskListContextProvider: React.FC<ChildrenProps> = ({
         } else {
           toast.error("Task not edited");
         }
+        handleLoading(false);
       })
       .catch((error) => {
         toast.error(error);
+        handleLoading(false);
       });
   };
 
   const checkTask = (id: string, isCompleted: boolean) => {
+    handleLoading(true);
     // update completed status
     fetch(`${SERVER_URL}/todo/${id}`, {
       method: "PUT",
@@ -177,13 +187,16 @@ export const TaskListContextProvider: React.FC<ChildrenProps> = ({
         } else {
           toast.error("Task not updated");
         }
+        handleLoading(false);
       })
       .catch((error) => {
         toast.error(error);
+        handleLoading(false);
       });
   };
 
   const deleteTask = (id: string) => {
+    handleLoading(true);
     fetch(`${SERVER_URL}/todo/${id}`, {
       method: "DELETE",
       headers: {
@@ -211,9 +224,11 @@ export const TaskListContextProvider: React.FC<ChildrenProps> = ({
           taskList.filter((task: TaskProps) => task.completed !== true)
         );
         toast.success("Task deleted");
+        handleLoading(false);
       })
       .catch((error) => {
         toast.error(error);
+        handleLoading(false);
       });
   };
 

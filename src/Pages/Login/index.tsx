@@ -7,12 +7,13 @@ import { SERVER_URL } from "../../Contexts/taskListContext";
 import { toast } from "react-toastify";
 
 const Login: React.FC = () => {
-  const { setUserData } = useContext(AuthContext) as AuthType;
+  const { setUserData, handleLoading } = useContext(AuthContext) as AuthType;
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
 
   function handleLogin() {
     // Call API for login
+    handleLoading(true);
     fetch(`${SERVER_URL}/login`, {
       method: "POST",
       headers: {
@@ -32,9 +33,11 @@ const Login: React.FC = () => {
       .then((data) => {
         toast.success(data.message);
         setUserData({ userId: data.user_id });
+        handleLoading(false);
       })
       .catch((error) => {
         toast.error(error.message);
+        handleLoading(false);
       });
   }
 
