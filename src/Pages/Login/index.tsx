@@ -12,6 +12,11 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState("");
 
   function handleLogin() {
+    // Validate username and password
+    if (username.trim() === "" || password.trim() === "") {
+      toast.error("Username and Password are required");
+      return;
+    }
     // Call API for login
     handleLoading(true);
     fetch(`${SERVER_URL}/login`, {
